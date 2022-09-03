@@ -1,12 +1,19 @@
-import { DataSourceOptions } from "typeorm";
+import { DataSource } from "typeorm";
 
-const ormconfig: DataSourceOptions = {
+const AppDataSource = new DataSource({
     type: 'postgres',
     host: '127.0.0.1',
     port: 5432,
-    username:'realworld',
+    username: 'realworld',
     database: 'realworld',
     password: 'root',
-}
+    entities: [__dirname + '/**/*.entity{.ts,.js}'],
+    synchronize: false,
+    migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
+});
 
-export default ormconfig;
+export default AppDataSource;
+
+AppDataSource.initialize()
+    .then(() => console.log("Data Source has been initialized"))
+    .catch((error) => console.error("Error initializing Data Source", error));
